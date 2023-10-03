@@ -5,6 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import io.danknil.database.Model;
 
+import java.sql.Connection;
+
 public class Product extends Model {
     private final int id;
     @Expose private final String name;
@@ -15,11 +17,5 @@ public class Product extends Model {
         this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    @Override
-    public String toJSON() {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        return gson.toJson(this);
     }
 }

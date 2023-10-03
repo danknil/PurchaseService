@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import io.danknil.database.Model;
 
+import java.sql.Connection;
 import java.util.Date;
 
 public class Purchase extends Model {
@@ -17,11 +18,5 @@ public class Purchase extends Model {
         this.customerId = customerId;
         this.productId = productId;
         this.purchaseDate = purchaseDate;
-    }
-
-    @Override
-    public String toJSON() {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
-        return gson.toJson(this);
     }
 }

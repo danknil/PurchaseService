@@ -2,9 +2,12 @@ package io.danknil.operation;
 
 import io.danknil.Main;
 
+import java.sql.Connection;
+
 public abstract class Operation {
-    protected Operation() {
-        Main.operations.put(getType(), this);
+    protected final Connection conn;
+    protected Operation(Connection conn) {
+        this.conn = conn;
     }
 
     /**
@@ -15,8 +18,7 @@ public abstract class Operation {
     /**
      * write to output file as a side effect
      * @param input input file path
-     * @param output output file path
      * @return json string
      */
-    public abstract String getJSON(String input, String output);
+    public abstract String getJSON(String input);
 }
