@@ -1,7 +1,5 @@
 package io.danknil.operation;
 
-import io.danknil.Main;
-
 import java.sql.Connection;
 
 public abstract class Operation {
@@ -17,8 +15,10 @@ public abstract class Operation {
 
     /**
      * write to output file as a side effect
-     * @param input input file path
+     *
+     * @param input  input file path
+     * @param output
      * @return json string
      */
-    public abstract String getJSON(String input);
+    public abstract String getJSON(String input, String output);
 }

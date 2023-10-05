@@ -5,8 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import io.danknil.database.Model;
 
-import java.sql.Connection;
-import java.util.Date;
+import java.sql.*;
 
 public class Purchase extends Model {
     @Expose private final int customerId;
