@@ -11,6 +11,7 @@ import io.danknil.operation.json.ErrorJSON;
 import io.danknil.operation.json.search.CriteriaJSON;
 
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,35 +28,33 @@ public class SearchOperation extends Operation {
     }
 
     @Override
-    public String getJSON(String input, String output) {
-        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    public String writeJSON(String input, String output) {
         try (FileReader reader = new FileReader(input)) {
-            CriteriaJSON[] criterias = gson.fromJson(gson.fromJson(reader, JsonObject.class).getAsJsonArray("criterias").toString(), CriteriaJSON[].class);
+            CriteriaJSON[] criterias = getGson().fromJson(getGson().fromJson(reader, JsonObject.class).getAsJsonArray("criterias").toString(), CriteriaJSON[].class);
 
             JsonObject searchOperation = new JsonObject();
             searchOperation.addProperty("type", "search");
 
             JsonArray jsonArray = new JsonArray();
 
-            for (CriteriaJSON criteria :
-                    criterias) {
+            for (CriteriaJSON criteria : criterias) {
                 List<Customer> results = criteria.getCustomers(this.conn);
                 JsonObject result = new JsonObject();
 
-                result.addProperty("criteria", gson.toJson(criteria));
-                result.addProperty("results", gson.toJson(results));
+                result.addProperty("criteria", getGson().toJson(criteria));
+                result.addProperty("results", getGson().toJson(results));
 
                 jsonArray.add(result);
             }
 
             searchOperation.add("results", jsonArray);
 
-            return gson.toJson(searchOperation);
+            return writeJSON(output, searchOperation);
         } catch (IOException e) {
             ErrorJSON errorJSON = new ErrorJSON("Файл ввода не найден");
             return errorJSON.writeJSON(output);
         } catch (SQLException e) {
-            ErrorJSON errorJSON = new ErrorJSON("Что-то с датабазой");
+            ErrorJSON errorJSON = new ErrorJSON("Ошибка к доступу к датабазе, проверьте параметры database.properties");
             return errorJSON.writeJSON(output);
         }
     }
